@@ -653,13 +653,14 @@ struct GaussKronrodAdjoint{CS, AD, FDT, VJP} <:
        AbstractAdjointSensitivityAlgorithm{CS, AD, FDT}
     autojacvec::VJP
     checkpointing::Bool
+	tol::Number
 end
 Base.@pure function GaussKronrodAdjoint(; chunk_size = 0, autodiff = true,
         diff_type = Val{:central},
         autojacvec = nothing,
-        checkpointing = false)
-    GaussKronrodAdjoint{chunk_size, autodiff, diff_type, typeof(autojacvec)}(
-        autojacvec, checkpointing)
+        checkpointing = false, tol=1e-7)
+    GaussKronrodAdjoint{chunk_size, autodiff, diff_type, typeof(autojacvec), typeof(tol)}(
+        autojacvec, checkpointing, tol)
 end
 
 function setvjp(sensealg::GaussKronrodAdjoint{CS, AD, FDT, Nothing}, vjp) where {
